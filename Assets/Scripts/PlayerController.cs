@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private GameObject particle;
     [SerializeField] private float speed;
     bool started;
     bool gameOver;
@@ -64,6 +65,16 @@ public class PlayerController : MonoBehaviour
         else if(rb.velocity.x > 0)
         {
             rb.velocity = new Vector3(0, 0, speed);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Flower")
+        {
+            GameObject tempPart = Instantiate(particle, other.gameObject.transform.position, Quaternion.identity) as GameObject;
+            Destroy(other.gameObject);
+            Destroy(tempPart, 1f);
+
         }
     }
 }
