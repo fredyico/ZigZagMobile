@@ -31,6 +31,8 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector3(speed, 0, 0);
                 started = true;
+
+                GameManager.instance.StartGame();
             }
         }
         Debug.DrawRay(transform.position, Vector3.down, Color.green);
@@ -41,6 +43,8 @@ public class PlayerController : MonoBehaviour
             rb.velocity = new Vector3(0, -10f, 0);
 
             Camera.main.GetComponent<CameraFollow>().gameOver = true;
+
+            GameManager.instance.GameOver();
 
 
             if (rb.transform.position.y < -22f)
@@ -69,7 +73,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Flower")
+        if(other.gameObject.CompareTag("Flower"))
         {
             GameObject tempPart = Instantiate(particle, other.gameObject.transform.position, Quaternion.identity) as GameObject;
             Destroy(other.gameObject);
