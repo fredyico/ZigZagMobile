@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
@@ -11,9 +9,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject mazePanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject tapText;
-    [SerializeField] private GameObject score;
-    [SerializeField] private GameObject highScore1;
-    [SerializeField] private GameObject highScore2;
+    
+    public TextMeshProUGUI score;
+    public TextMeshProUGUI highScore1;
+    public TextMeshProUGUI highScore2;
+
 
     private void Awake()
     {
@@ -21,6 +21,11 @@ public class UIManager : MonoBehaviour
         {
             instance = this;
         }
+    }
+
+    private void Start()
+    {
+        highScore1.text = "High Score: " + PlayerPrefs.GetInt("highScore").ToString();
     }
 
     public void GameStart()
@@ -31,6 +36,8 @@ public class UIManager : MonoBehaviour
 
     public void GameOver()
     {
+        score.text = PlayerPrefs.GetInt ("score").ToString();
+        highScore2.text = PlayerPrefs.GetInt("highScore").ToString();
         gameOverPanel.SetActive(true);
     }
 

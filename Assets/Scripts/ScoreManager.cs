@@ -33,7 +33,8 @@ public class ScoreManager : MonoBehaviour
 
     public void StopScore()
     {
-        CancelInvoke(nameof(StartScore));
+        CancelInvoke(nameof(IncrementScore));
+
         PlayerPrefs.SetInt("score", score);
 
         if (PlayerPrefs.HasKey("highScore"))
