@@ -6,17 +6,17 @@ public class TriggerChecker : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Player")
+        if(other.gameObject.CompareTag("Player"))
         {
             ChangeCollorOnEnter();
         }
     }
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             ChangeCollorOnExit();
-            Invoke("FallDown", 5.5f);
+            Invoke(nameof(FallDown), 5.5f);
             FallDown();
         }
     }

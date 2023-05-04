@@ -9,20 +9,19 @@ public class PlayerController : MonoBehaviour
     bool started;
     bool gameOver;
     Rigidbody rb;
+    public AudioSource deadSound;
+
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        deadSound = GetComponent<AudioSource>();
     }
-
-    // Start is called before the first frame update
     void Start()
     {
         started = false;
         gameOver = false;
     }
-
-    // Update is called once per frame
     void Update()
     {
         if (!started)
@@ -31,27 +30,31 @@ public class PlayerController : MonoBehaviour
             {
                 rb.velocity = new Vector3(speed, 0, 0);
                 started = true;
-
                 GameManager.instance.StartGame();
             }
         }
         Debug.DrawRay(transform.position, Vector3.down, Color.green);
 
-        if (!Physics.Raycast(transform.position,Vector3.down, 1f))
+        if (rb.transform.position.y < -0.1f)
         {
+            PlayFallSound();
+        }
+
+        if (!Physics.Raycast(transform.position, Vector3.down, 1f))
+        {
+           
             gameOver = true;
             rb.velocity = new Vector3(0, -10f, 0);
+            
+
 
             Camera.main.GetComponent<CameraFollow>().gameOver = true;
-
             GameManager.instance.GameOver();
 
-
-            if (rb.transform.position.y < -22f)
+            if (rb.transform.position.y < -10f)
             {
                 Destroy(this.gameObject);
             }
-            
         }
 
         if (Input.GetMouseButtonDown(0) && !gameOver)
@@ -59,26 +62,32 @@ public class PlayerController : MonoBehaviour
             SwitchDirection();
         }
     }
-
     void SwitchDirection()
     {
         if (rb.velocity.z > 0)
         {
             rb.velocity = new Vector3(speed, 0, 0);
         }
-        else if(rb.velocity.x > 0)
+        else if (rb.velocity.x > 0)
         {
             rb.velocity = new Vector3(0, 0, speed);
         }
     }
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.CompareTag("Flower"))
+        if (other.gameObject.CompareTag("Flower"))
         {
             GameObject tempPart = Instantiate(particle, other.gameObject.transform.position, Quaternion.identity) as GameObject;
             Destroy(other.gameObject);
             Destroy(tempPart, 1f);
+        }
+    }
 
+    void PlayFallSound()
+    {
+        if (!deadSound.isPlaying)
+        {
+            deadSound.Play();
         }
     }
 }
